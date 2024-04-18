@@ -1,0 +1,38 @@
+{
+  "name": "scrabble-toolkit-backend",
+  "version": "0.1.0",
+  "description": "This Scrabble toolkit provides an API with features like word search, word validation, and tile counting.",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/morfin119/scrabble-toolkit-backend.git"
+  },
+  "keywords": [
+    "scrabble",
+    "scrabble toolkit",
+    "API",
+    "backend",
+    "microservices"
+  ],
+  "author": "Ricardo Morfín",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/morfin119/scrabble-toolkit-backend/issues"
+  },
+  "homepage": "https://github.com/morfin119/scrabble-toolkit-backend#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.0",
+    "semistandard": "^17.0.0"
+  }
+}
