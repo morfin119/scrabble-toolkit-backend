@@ -10,7 +10,7 @@ describe('Language Service', () => {
   // Test suite for loadLanguages function.
   describe('loadLanguages', () => {
     it('should throw and error if the data directory is not found', () => {
-      const LanguageService = require('../services/LanguageService');
+      const LanguageService = require('./language.service');
 
       // Create an instance of LanguageService
       const languageService = new LanguageService();
@@ -41,7 +41,7 @@ describe('Language Service', () => {
 
     it('should return an array of available languages from a valid data ' +
        'directory', () => {
-      const LanguageService = require('../services/LanguageService');
+      const LanguageService = require('./language.service');
 
       // Simulate the presence of languages by creating subdirectories in the
       // temporary directory.
@@ -65,7 +65,7 @@ describe('Language Service', () => {
     });
 
     it('should return an empty array on an empty directory', () => {
-      const LanguageService = require('../services/LanguageService');
+      const LanguageService = require('./language.service');
 
       // Create an instance of LanguageService
       const languageService = new LanguageService();
@@ -82,7 +82,7 @@ describe('Language Service', () => {
 
     it('should throw and error if getAvailableLanguages is called without ' +
        'invoking loadLanguages first', () => {
-      const LanguageService = require('../services/LanguageService');
+      const LanguageService = require('./language.service');
 
       // Create an instance of LanguageService
       const languageService = new LanguageService();
@@ -95,7 +95,7 @@ describe('Language Service', () => {
 
     it('should return the same available languages array in multiple ' +
        'instances after loading languages in one instance', () => {
-      const LanguageService = require('../services/LanguageService');
+      const LanguageService = require('./language.service');
 
       // Simulate the presence of languages by creating subdirectories in the
       // temporary directory.
