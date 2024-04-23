@@ -1,50 +1,101 @@
 const fs = require('fs');
 const path = require('path');
 
-/** A service for managing available languages for use in the Scrabble toolkit API.
- * This service facilitates loading and retrieving available languages.
+/**
+ * Manages available languages for use in the Scrabble toolkit API as a
+ * singleton. To obtain the singleton instance, use the getInstance method.
+ *
+ * Ensure the class is initialized by calling loadLanguages before retrieving
+ * languages.
  * @class
  */
 class LanguageService {
-  // Module-level variable to store available languages.
-  static #availableLanguages = null;
+  /**
+   * Represents the singleton instance of the LanguageService class.
+   * @type { LanguageService | null } @private @static
+   */
+  static #instance = null;
+
+  /**
+  * Holds the list of available languages loaded from the data directory.
+  * @type { string[] | null } @private
+  */
+  #availableLanguages = null;
+
+  /**
+  * Represents a private key used to control access to the private constructor
+  * of the LanguageService class.
+  * This symbol is used to prevent external instantiation of the class.
+  * @type { Symbol } @private @static
+  */
+  static #PRIVATE_CONSTRUCTOR_KEY = Symbol('PRIVATE_CONSTRUCTOR_KEY');
+
+  /**
+   * Private constructor to prevent external instantiation.
+   * @param { Symbol } constructorKey Private key used to control access to the
+   * private constructor.
+   */
+  constructor (constructorKey) {
+    // Prevents direct instantiation from outside the class.
+    if (constructorKey !== LanguageService.#PRIVATE_CONSTRUCTOR_KEY) {
+      throw new Error('Singleton class, use getInstance() method instead.');
+    }
+  }
+
+  /**
+   * Returns the singleton instance of LanguageService.
+   * @returns { LanguageService } The singleton instance.
+   */
+  static getInstance () {
+    // Creates a single instance if not already created.
+    if (!LanguageService.#instance) {
+      LanguageService.#instance =
+        new LanguageService(LanguageService.#PRIVATE_CONSTRUCTOR_KEY);
+    }
+
+    // Return the singleton instance.
+    return Object.freeze(LanguageService.#instance);
+  }
 
   /**
    * Loads available languages from a specified data directory.
-   * Each subdirectory in the specified directory is treated as a language.
    *
-   * @param {string} dataDir The path to the data directory containing language folders.
-   * @throws {Error} If the data directory is not found.
+   * Each subdirectory in the specified directory is treated as a language.
+   * @param { string } dataDirPath The path to the data directory containing
+   * language folders.
+   * @throws { Error } If the data directory is not found.
    */
-  loadLanguages (dataDir) {
-    // Check if the data directory exists.
-    if (!fs.existsSync(dataDir)) {
-      throw new Error(`Data directory ${dataDir} not found`);
+  loadLanguages (dataDirPath) {
+    // Check if the specified data directory exists.
+    if (!fs.existsSync(dataDirPath)) {
+      throw new Error(`Data directory ${dataDirPath} not found`);
     }
 
-    // Read language directories and filter out non-directories.
-    const languageFolders = fs.readdirSync(dataDir)
-      .filter(file => fs.statSync(path.join(dataDir, file)).isDirectory());
+    // Retrieves language folders from the data directory.
+    const languageFolders = fs.readdirSync(dataDirPath)
+      .filter(file => fs.statSync(path.join(dataDirPath, file)).isDirectory());
 
-    // Update module-level variable availableLanguages
-    LanguageService.#availableLanguages = languageFolders;
+    // Assigns the retrieved language folders to availableLanguages.
+    this.#availableLanguages = languageFolders;
   }
 
   /**
    * Gets a list of available languages.
-   * Prior to invoking this function, ensure that loadLanguages has been called
-   * to populate the available languages.
    *
-   * @returns {string[]} An immutable array of language codes.
-   * @throws {Error} If loadLanguages has not been called before invoking this function.
+   * Prior to invoking this function, ensure that loadLanguages has been called.
+   * @returns { string[] } An immutable array of language codes.
+   * @throws { Error } If loadLanguages has not been called before invoking this
+   * function.
    */
   getAvailableLanguages () {
-    if (LanguageService.#availableLanguages === null) {
+    // Throws an error if loadLanguages hasn't been called before.
+    if (this.#availableLanguages === null) {
       throw new Error('No languages loaded. Call loadLanguages before ' +
         'invoking getAvailableLanguages.');
     }
 
-    return Object.freeze(LanguageService.#availableLanguages);
+    // Returns an immutable array of the available languages.
+    return Object.freeze(this.#availableLanguages);
   }
 }
 

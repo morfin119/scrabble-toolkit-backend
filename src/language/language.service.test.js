@@ -1,57 +1,65 @@
 /* eslint-env jest */
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 
 describe('Language Service', () => {
+  // Temporary directory path for testing.
+  let tempDataDirPath;
+
   beforeEach(() => {
+    // Create a temporary directory for testing.
+    tempDataDirPath = fs.mkdtempSync('scrabble_data');
+
+    // Create language directories within the temporary directory.
+    const languages = ['en', 'fr', 'es'];
+    for (const language of languages) {
+      fs.mkdirSync(path.join(tempDataDirPath, language));
+    }
+
+    // Reset all modules to avoid side effects between tests.
     jest.resetModules();
   });
 
-  // Test suite for loadLanguages function.
-  describe('loadLanguages', () => {
-    it('should throw and error if the data directory is not found', () => {
-      const LanguageService = require('./language.service');
+  afterEach(() => {
+    // Remove the temporary directory after testing.
+    fs.rmSync(tempDataDirPath, { recursive: true });
+  });
 
-      // Create an instance of LanguageService
-      const languageService = new LanguageService();
+  describe('Language Service Instantiation', () => {
+    it('should throw an error when trying to instantiate the class directly',
+      () => {
+        // Require LanguageService class.
+        const LanguageService = require('./language.service');
+
+        // Expect instantiation of LanguageService class to throw an error.
+        expect(() => new LanguageService())
+          .toThrow('Singleton class, use getInstance() method instead.');
+      });
+  });
+
+  // Test suite for the loadLanguages function.
+  describe('loadLanguages', () => {
+    it('should throw an error if the data directory is not found', () => {
+      // Obtain the singleton instance of LanguageService.
+      const LanguageService = require('./language.service');
+      const languageService = LanguageService.getInstance();
 
       // Specify an invalid data directory.
       const invalidDataDir = 'invalid/path';
 
       // Expect loadLanguages to throw an error with a specific message.
       expect(() => languageService.loadLanguages(invalidDataDir))
-        .toThrowError(`Data directory ${invalidDataDir} not found`);
+        .toThrow(`Data directory ${invalidDataDir} not found`);
     });
   });
 
-  // Test suite for getAvailableLanguages function
+  // Test suite for the getAvailableLanguages function.
   describe('getAvailableLanguages', () => {
-    // Temporary directory path for testing.
-    let tempDataDirPath;
-
-    beforeEach(() => {
-      // Create a temporary directory for testing.
-      tempDataDirPath = fs.mkdtempSync('scrabble_data');
-    });
-
-    afterEach(() => {
-      // Remove the temporary directory after testing.
-      fs.rmSync(tempDataDirPath, { recursive: true });
-    });
-
     it('should return an array of available languages from a valid data ' +
        'directory', () => {
+      // Obtain the singleton instance of LanguageService.
       const LanguageService = require('./language.service');
-
-      // Simulate the presence of languages by creating subdirectories in the
-      // temporary directory.
-      const subdirectories = ['en', 'fr', 'es'];
-      for (const dir of subdirectories) {
-        fs.mkdirSync(path.join(tempDataDirPath, dir));
-      }
-
-      // Create an instance of LanguageService
-      const languageService = new LanguageService();
+      const languageService = LanguageService.getInstance();
 
       // Load languages from the temporary directory.
       languageService.loadLanguages(tempDataDirPath);
@@ -61,14 +69,16 @@ describe('Language Service', () => {
 
       // Expect the returned languages to match the subdirectories created. A
       // set is used because the order of the subdirectories may vary when read.
-      expect(new Set(languages)).toEqual(new Set(subdirectories));
+      expect(new Set(languages)).toEqual(new Set(['en', 'fr', 'es']));
     });
 
     it('should return an empty array on an empty directory', () => {
+      // Obtain the singleton instance of LanguageService.
       const LanguageService = require('./language.service');
+      const languageService = LanguageService.getInstance();
 
-      // Create an instance of LanguageService
-      const languageService = new LanguageService();
+      // Delete the contents of the temporary directory.
+      fs.emptyDirSync(tempDataDirPath);
 
       // Load languages from the temporary directory (which is empty).
       languageService.loadLanguages(tempDataDirPath);
@@ -80,51 +90,16 @@ describe('Language Service', () => {
       expect(languages).toEqual([]);
     });
 
-    it('should throw and error if getAvailableLanguages is called without ' +
+    it('should throw an error if getAvailableLanguages is called without ' +
        'invoking loadLanguages first', () => {
+      // Obtain the singleton instance of LanguageService.
       const LanguageService = require('./language.service');
-
-      // Create an instance of LanguageService
-      const languageService = new LanguageService();
+      const languageService = LanguageService.getInstance();
 
       // Expect getAvailableLanguages to throw an error with a specific message.
       expect(() => languageService.getAvailableLanguages())
-        .toThrowError('No languages loaded. Call loadLanguages before ' +
+        .toThrow('No languages loaded. Call loadLanguages before ' +
                       'invoking getAvailableLanguages.');
-    });
-
-    it('should return the same available languages array in multiple ' +
-       'instances after loading languages in one instance', () => {
-      const LanguageService = require('./language.service');
-
-      // Simulate the presence of languages by creating subdirectories in the
-      // temporary directory.
-      const subdirectories = ['en', 'fr', 'es'];
-      for (const dir of subdirectories) {
-        fs.mkdirSync(path.join(tempDataDirPath, dir));
-      }
-
-      // Create the first instance of LanguageService.
-      const languageService1 = new LanguageService();
-
-      // Load languages from the temporary directory using the first instance.
-      languageService1.loadLanguages(tempDataDirPath);
-
-      // Create the second instance of LanguageService.
-      const languageService2 = new LanguageService();
-
-      // Get the available languages using the first instance.
-      const languages1 = languageService1.getAvailableLanguages();
-
-      // Get the available languages using the second instance.
-      const languages2 = languageService2.getAvailableLanguages();
-
-      // Assert that the available languages array is the same in both instances.
-      expect(languages2).toBe(languages1);
-
-      // Expect the returned languages to match the subdirectories created. A
-      // set is used because the order of the subdirectories may vary when read.
-      expect(new Set(languages1)).toEqual(new Set(subdirectories));
     });
   });
 });

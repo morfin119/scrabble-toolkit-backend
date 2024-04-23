@@ -29,6 +29,7 @@
   "homepage": "https://github.com/morfin119/scrabble-toolkit-backend#readme",
   "dependencies": {
     "express": "^4.19.2",
+    "fs-extra": "^11.2.0",
     "morgan": "^1.10.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
