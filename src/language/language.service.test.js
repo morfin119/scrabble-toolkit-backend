@@ -51,6 +51,56 @@ describe('Language Service', () => {
       expect(() => languageService.loadLanguages(invalidDataDir))
         .toThrow(`Data directory ${invalidDataDir} not found`);
     });
+
+    it('should not reload languages if forceReload is false and languages ' +
+       'are already loaded', () => {
+      // Obtain the singleton instance of LanguageService.
+      const LanguageService = require('./language.service');
+      const languageService = LanguageService.getInstance();
+
+      // Load languages.
+      languageService.loadLanguages(tempDataDirPath);
+
+      // Get the available languages before reloading.
+      const availableLanguagesBeforeReload =
+        languageService.getAvailableLanguages();
+
+      // Reload languages with forceReload set to false.
+      languageService.loadLanguages(tempDataDirPath, false);
+
+      // Get the available languages after reloading.
+      const availableLanguagesAfterReload =
+        languageService.getAvailableLanguages();
+
+      // Assert that the available languages remain unchanged
+      expect(availableLanguagesAfterReload)
+        .toStrictEqual(availableLanguagesBeforeReload);
+    });
+
+    it('should reload languages if forceReload is true even if languages are ' +
+       'already loaded', () => {
+      // Obtain the singleton instance of LanguageService.
+      const LanguageService = require('./language.service');
+      const languageService = LanguageService.getInstance();
+
+      // Load languages.
+      languageService.loadLanguages(tempDataDirPath);
+
+      // Get the available languages before reloading.
+      const availableLanguagesBeforeReload =
+        languageService.getAvailableLanguages();
+
+      // Reload languages with forceReload set to true.
+      languageService.loadLanguages(tempDataDirPath, false);
+
+      // Get the available languages after reloading.
+      const availableLanguagesAfterReload =
+        languageService.getAvailableLanguages();
+
+      // Assert that the available languages have changed
+      expect(availableLanguagesAfterReload)
+        .not.toBe(availableLanguagesBeforeReload);
+    });
   });
 
   // Test suite for the getAvailableLanguages function.

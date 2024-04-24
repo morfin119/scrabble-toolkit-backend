@@ -58,14 +58,23 @@ class LanguageService {
   }
 
   /**
-   * Loads available languages from a specified data directory.
+   * Loads available languages from a specified data directory. Each
+   * subdirectory in the specified directory is treated as a language.
    *
-   * Each subdirectory in the specified directory is treated as a language.
+   * If forceReload is true, it reloads languages even if they have been loaded
+   * before.
    * @param { string } dataDirPath The path to the data directory containing
    * language folders.
+   * @param { boolean } [forceReload=true] Flag to indicate whether to force
+   * reload languages.
    * @throws { Error } If the data directory is not found.
    */
-  loadLanguages (dataDirPath) {
+  loadLanguages (dataDirPath, forceReload = false) {
+    // Check if forceReload is true or if the languages have not been loaded before
+    if (forceReload && this.#availableLanguages !== null) {
+      return;
+    }
+
     // Check if the specified data directory exists.
     if (!fs.existsSync(dataDirPath)) {
       throw new Error(`Data directory ${dataDirPath} not found`);
