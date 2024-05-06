@@ -9,8 +9,7 @@
     "baseUrl": "./",
     "paths": {
       "@data/*": ["data/*"],
-      "@config/*": ["src/config/*"],
-      "@utils/*": ["src/utils/*"]
+      "@config/*": ["src/config/*"]
     },
   },
   "include": [
