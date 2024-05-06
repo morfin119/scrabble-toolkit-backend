@@ -8,8 +8,10 @@
     "outDir": "build",
     "baseUrl": "./",
     "paths": {
+      "@src/*": ["src/*"],
       "@data/*": ["data/*"],
-      "@config/*": ["src/config/*"]
+      "@config/*": ["src/config/*"],
+      "@utils/*": ["src/utils/*"]
     },
   },
   "include": [
