@@ -1,0 +1,32 @@
+{
+  "language": "fr",
+  "tiles": {
+      "A": {"points": 1, "count": 9},
+      "B": {"points": 3, "count": 2},
+      "C": {"points": 3, "count": 2},
+      "D": {"points": 2, "count": 3},
+      "E": {"points": 1, "count": 15},
+      "F": {"points": 4, "count": 2},
+      "G": {"points": 2, "count": 2},
+      "H": {"points": 4, "count": 2},
+      "I": {"points": 1, "count": 8},
+      "J": {"points": 8, "count": 1},
+      "K": {"points": 10, "count": 1},
+      "L": {"points": 1, "count": 5},
+      "M": {"points": 2, "count": 3},
+      "N": {"points": 1, "count": 6},
+      "O": {"points": 1, "count": 6},
+      "P": {"points": 3, "count": 2},
+      "Q": {"points": 8, "count": 1},
+      "R": {"points": 1, "count": 6},
+      "S": {"points": 1, "count": 6},
+      "T": {"points": 1, "count": 6},
+      "U": {"points": 1, "count": 6},
+      "V": {"points": 4, "count": 2},
+      "W": {"points": 10, "count": 1},
+      "X": {"points": 10, "count": 1},
+      "Y": {"points": 10, "count": 1},
+      "Z": {"points": 10, "count": 1},
+      "_": {"points": 0, "count": 2}
+  }
+}
