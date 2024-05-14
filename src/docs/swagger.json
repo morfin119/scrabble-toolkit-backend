@@ -1,0 +1,166 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Scrabble Toolkit RESTful API",
+    "version": "0.1.0"
+  },
+  "components": {
+    "schemas": {
+      "TileSet": {
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "string",
+            "example": "en"
+          },
+          "tiles": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "points": {
+                  "type": "integer"
+                },
+                "count": {
+                  "type": "integer"
+                }
+              }
+            },
+            "example": {
+              "A": {
+                "points": 1,
+                "count": 9
+              },
+              "B": {
+                "points": 3,
+                "count": 2
+              },
+              "C": {
+                "points": 3,
+                "count": 2
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Tile Sets"
+    }
+  ],
+  "paths": {
+    "/api/tilesets": {
+      "get": {
+        "summary": "Retrieve all available Scrabble tile sets.",
+        "description": "Retrieve the available Scrabble tile sets.",
+        "tags": [
+          "Tile Sets"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response. Returns an array of Scrabble tile sets.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TileSet"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tilesets/{language}": {
+      "get": {
+        "summary": "Retrieves a Scrabble tile set based on the specified language.",
+        "description": "Returns the Scrabble tile set for the specified language, if available.",
+        "tags": [
+          "Tile Sets"
+        ],
+        "parameters": [
+          {
+            "name": "language",
+            "in": "path",
+            "description": "The language code for the desired tile set.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response. Returns a single Scrabble tile set object.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/TileSet"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request. This error occurs when the language parameter is not a valid ISO 3166-1 alpha-2 code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "A message indicating the error."
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Language parameter must be a valid ISO 3166-1 alpha-2 code."
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Tile set not found for the provided language.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "A message indicating the error."
+                    }
+                  }
+                },
+                "example": {
+                  "error": "Scrabble tile set not found for language '{language}'."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
