@@ -3,6 +3,7 @@ import express, {Express} from 'express';
 import morgan from 'morgan';
 import 'reflect-metadata'; // tsyringe
 import {container} from 'tsyringe';
+import errorHandler from '@src/middleware/errorHandler';
 
 // Configuration imports
 import configureSwagger from '@config/swagger.config';
@@ -50,6 +51,9 @@ app.use(morgan('tiny'));
 
 // Define routes
 app.use('/api/tileSets', container.resolve(TileSetController).routes());
+
+// Register the error handler middleware
+app.use(errorHandler);
 
 // Start the server
 startServer(app);
