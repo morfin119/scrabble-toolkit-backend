@@ -40,7 +40,10 @@ container.register<ScrabbleTileSet[]>('AVAILABLE_TILESETS', {
 const app: Express = express();
 
 // Configure Swagger documentation
-configureSwagger(app);
+configureSwagger(
+  app,
+  process.env.SWAGGER_DOCS_PATH || './src/docs/swagger.yaml'
+);
 
 // Register morgan middleware
 app.use(morgan('tiny'));

@@ -25,8 +25,8 @@ export default class TileSetService {
    * @param language
    * The language of the tile set to retrieve.
    * @returns
-   * The ScrabbleTileSet corresponding to the specified language, or undefined if
-   * not found.
+   * The ScrabbleTileSet corresponding to the specified language, or undefined
+   * if not found.
    */
   getTileSet(language: string): ScrabbleTileSet | undefined {
     return this.tileSets.find(tileSet => tileSet.language === language);
