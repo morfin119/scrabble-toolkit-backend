@@ -1,5 +1,5 @@
 import {ScrabbleTileSet} from '@src/types';
-import TileSetService from '../../TileSetService';
+import TileSetService from '@components/TileSet/TileSetService';
 
 // Mock data
 const mockTileSets: ScrabbleTileSet[] = [

@@ -3,4 +3,12 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   testPathIgnorePatterns: ['.d.ts', '.js'],
+  moduleNameMapper: {
+    '^@src/(.*)$': '<rootDir>/src/$1',
+    '^@components/(.*)$': '<rootDir>/src/components/$1',
+    '^@data/(.*)$': '<rootDir>/src/data/$1',
+    '^@config/(.*)$': '<rootDir>/src/config/$1',
+    '^@utils/(.*)$': '<rootDir>/src/utils/$1',
+    '^@middleware/(.*)$': '<rootDir>/src/middleware/$1',
+  },
 };
