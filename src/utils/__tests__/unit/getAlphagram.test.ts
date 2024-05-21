@@ -1,70 +1,39 @@
-import {ScrabbleTileSet} from '@src/types';
 import getAlphagram from '@utils/getAlphagram';
-
-// Mock data
-const mockTileSet: ScrabbleTileSet = {
-  language: 'es',
-  tiles: {
-    A: {points: 1, count: 12},
-    B: {points: 3, count: 2},
-    C: {points: 3, count: 4},
-    CH: {points: 5, count: 1},
-    D: {points: 2, count: 5},
-    E: {points: 1, count: 12},
-    F: {points: 4, count: 1},
-    G: {points: 2, count: 2},
-    H: {points: 4, count: 2},
-    I: {points: 1, count: 6},
-    J: {points: 8, count: 1},
-    L: {points: 1, count: 4},
-    LL: {points: 8, count: 1},
-    M: {points: 3, count: 2},
-    N: {points: 1, count: 5},
-    Ñ: {points: 8, count: 1},
-    O: {points: 1, count: 9},
-    P: {points: 3, count: 2},
-    Q: {points: 5, count: 1},
-    R: {points: 1, count: 5},
-    RR: {points: 8, count: 1},
-    S: {points: 1, count: 6},
-    T: {points: 1, count: 4},
-    U: {points: 1, count: 5},
-    V: {points: 4, count: 1},
-    X: {points: 8, count: 1},
-    Y: {points: 4, count: 1},
-    Z: {points: 10, count: 1},
-    _: {points: 0, count: 2},
-  },
-};
 
 describe('getAlphagram', () => {
   it('should return an empty string for an empty word', () => {
-    const result = getAlphagram('', mockTileSet);
+    const mockValidCharacters = ['A'];
+    const result = getAlphagram('', mockValidCharacters);
     expect(result).toEqual('');
   });
 
   it('should return a single letter alphagram for a single letter word', () => {
-    const result = getAlphagram('A', mockTileSet);
+    const mockValidCharacters = ['A'];
+    const result = getAlphagram('A', mockValidCharacters);
     expect(result).toEqual('A');
   });
 
   it('should return an alphagram for a basic word', () => {
-    const result = getAlphagram('CAB', mockTileSet);
+    const mockValidCharacters = ['A', 'B', 'C'];
+    const result = getAlphagram('CAB', mockValidCharacters);
     expect(result).toEqual('ABC');
   });
 
-  it('should handle lowercase letters', () => {
-    const result = getAlphagram('HelLo', mockTileSet);
-    expect(result).toEqual('EHLLO');
-  });
-
   it('should ignore invalid letters', () => {
-    const result = getAlphagram('INV2LID', mockTileSet);
+    const mockValidCharacters = ['D', 'I', 'L', 'N', 'V'];
+    const result = getAlphagram('INV2LID', mockValidCharacters);
     expect(result).toEqual('DIILNV');
   });
 
-  it('should handle multi-character letters', () => {
-    const result = getAlphagram('CHARRO', mockTileSet);
+  it('should handle two character letters', () => {
+    const mockValidCharacters = ['A', 'C', 'CH', 'O', 'R', 'RR'];
+    const result = getAlphagram('CHARRO', mockValidCharacters);
     expect(result).toEqual('ACHORR');
+  });
+
+  it('should handle three character letters', () => {
+    const mockValidCharacters = ['C', 'E', 'G', 'I', 'L', 'L·L', 'O'];
+    const result = getAlphagram('COL·LEGI', mockValidCharacters);
+    expect(result).toEqual('CEGIL·LO');
   });
 });
