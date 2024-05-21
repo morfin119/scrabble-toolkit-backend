@@ -1,5 +1,3 @@
-import {ScrabbleTileSet} from '@src/types';
-
 /**
  * Generates an alphagram (a string of sorted letters) from the input word,
  * considering valid three character letters, two character letters, and single
