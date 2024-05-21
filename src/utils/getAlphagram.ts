@@ -14,6 +14,8 @@
  * The alphagram of the given word in uppercase.
  */
 function getAlphagram(word: string, validLetters: string[]): string {
+  word = word.toUpperCase();
+  validLetters = validLetters.map(letter => letter.toUpperCase());
   const letters: string[] = [];
 
   let i = 0;
@@ -24,6 +26,7 @@ function getAlphagram(word: string, validLetters: string[]): string {
       if (validLetters.includes(trigraph)) {
         letters.push(trigraph);
         i += 3;
+        continue;
       }
     }
 
@@ -33,6 +36,7 @@ function getAlphagram(word: string, validLetters: string[]): string {
       if (validLetters.includes(digraph)) {
         letters.push(digraph);
         i += 2;
+        continue;
       }
     }
 
