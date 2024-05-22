@@ -1,7 +1,7 @@
 /**
  * Generates an alphagram (a string of sorted letters) from the input word,
- * considering valid three character letters, two character letters, and single
- * character letters.
+ * considering valid trigraph letters, digraph letters, and single-character
+ * letters.
  *
  * NOTE: If a letter is invalid, that is, not part of the provided array of
  * valid letters, it is ignored and no error is thrown.
@@ -9,40 +9,39 @@
  * @param word
  * The word to create an alphagram from.
  * @param validLetters
- * An array of valid single letters, digraphs, and trigraphs.
+ * An array of valid single-character letters, digraphs, and trigraphs.
  * @returns
- * The alphagram of the given word in uppercase.
+ * The alphagram of the given word.
  */
 function getAlphagram(word: string, validLetters: string[]): string {
-  word = word.toUpperCase();
-  validLetters = validLetters.map(letter => letter.toUpperCase());
+  const validLettersSet = new Set(validLetters);
   const letters: string[] = [];
 
   let i = 0;
   while (i < word.length) {
-    // Handle two character letters
+    // Handle trigraph letters
     if (i + 2 < word.length) {
       const trigraph = word.slice(i, i + 3);
-      if (validLetters.includes(trigraph)) {
+      if (validLettersSet.has(trigraph)) {
         letters.push(trigraph);
         i += 3;
         continue;
       }
     }
 
-    // Handle three character letters
+    // Handle digraph letters
     if (i + 1 < word.length) {
       const digraph = word.slice(i, i + 2);
-      if (validLetters.includes(digraph)) {
+      if (validLettersSet.has(digraph)) {
         letters.push(digraph);
         i += 2;
         continue;
       }
     }
 
-    // Handle single character letters
+    // Handle single-character letters
     const letter = word[i];
-    if (validLetters.includes(letter)) {
+    if (validLettersSet.has(letter)) {
       letters.push(letter);
     }
 

@@ -25,21 +25,15 @@ describe('getAlphagram', () => {
     expect(result).toEqual('DIILNV');
   });
 
-  it('should handle two character letters', () => {
+  it('should handle digraph letters', () => {
     const mockValidLetters = ['A', 'C', 'CH', 'O', 'R', 'RR'];
     const result = getAlphagram('CHARRO', mockValidLetters);
     expect(result).toEqual('ACHORR');
   });
 
-  it('should handle three character letters', () => {
+  it('should handle trigraph letters', () => {
     const mockValidLetters = ['C', 'E', 'G', 'I', 'L', 'L·L', 'O'];
     const result = getAlphagram('COL·LEGI', mockValidLetters);
     expect(result).toEqual('CEGIL·LO');
-  });
-
-  it('should handle mixed case input word and validLetters', () => {
-    const mockValidLetters = ['E', 'h', 'l', 'O'];
-    const result = getAlphagram('HelLo', mockValidLetters);
-    expect(result).toEqual('EHLLO');
   });
 });
