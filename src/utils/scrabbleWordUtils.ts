@@ -1,9 +1,13 @@
 /**
- * Gets the alphagram (a string of sorted letters) of the input word,
- * considering valid trigraph letters, digraph letters, and single-character
- * letters.
+ * Gets the alphagram (a string of sorted letters) of the input word, based on
+ * the provided array of valid letters.
  *
- * NOTE: If a letter is invalid, that is, not part of the provided array of
+ * The function supports single-character letters, digraphs (two-character
+ * combinations), and trigraphs (three-character combinations). It processes the
+ * word from left to right, giving precedence to trigraphs over digraphs and
+ * single-character letters, and to digraphs over single-character letters.
+ *
+ * NOTE: If a letter is invalid, meaning it is not part of the provided array of
  * valid letters, it is ignored and no error is thrown.
  *
  * @param word
