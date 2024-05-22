@@ -1,5 +1,5 @@
 /**
- * Generates an alphagram (a string of sorted letters) from the input word,
+ * Gets the alphagram (a string of sorted letters) of the input word,
  * considering valid trigraph letters, digraph letters, and single-character
  * letters.
  *
@@ -7,13 +7,13 @@
  * valid letters, it is ignored and no error is thrown.
  *
  * @param word
- * The word to create an alphagram from.
+ * The word from which to create an alphagram.
  * @param validLetters
  * An array of valid single-character letters, digraphs, and trigraphs.
  * @returns
  * The alphagram of the given word.
  */
-function getAlphagram(word: string, validLetters: string[]): string {
+export function getAlphagram(word: string, validLetters: string[]): string {
   const validLettersSet = new Set(validLetters);
   const letters: string[] = [];
 
@@ -50,5 +50,3 @@ function getAlphagram(word: string, validLetters: string[]): string {
 
   return letters.sort().join('');
 }
-
-export default getAlphagram;

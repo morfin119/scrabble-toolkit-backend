@@ -1,4 +1,4 @@
-import getAlphagram from '@utils/getAlphagram';
+import {getAlphagram} from '@utils/scrabbleWordUtils';
 
 describe('getAlphagram', () => {
   it('should return an empty string for an empty word', () => {
