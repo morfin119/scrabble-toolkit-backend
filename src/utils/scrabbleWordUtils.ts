@@ -111,3 +111,39 @@ export function calculateWordValue(
 
   return value;
 }
+
+/**
+ * Finds hooks for a given word based on a set of valid words and valid letters.
+ *
+ * A hook in Scrabble is a single letter that you can add to the front or back
+ * of an existing word to form a new valid word.
+ *
+ * @param word
+ * The word for which to find hooks.
+ * @param validWords
+ * A set of valid words.
+ * @param validLetters
+ * A set of valid letters.
+ * @returns
+ * An array containing two sets: the first set contains all front hooks, the
+ * second set contains all back hooks.
+ */
+export function findHooks(
+  word: string,
+  validWords: Set<string>,
+  validLetters: Set<string>
+): [Set<string>, Set<string>] {
+  const frontHooks: Set<string> = new Set();
+  const backHooks: Set<string> = new Set();
+
+  for (const letter of validLetters) {
+    if (validWords.has(letter + word)) {
+      frontHooks.add(letter);
+    }
+    if (validWords.has(word + letter)) {
+      backHooks.add(letter);
+    }
+  }
+
+  return [frontHooks, backHooks];
+}

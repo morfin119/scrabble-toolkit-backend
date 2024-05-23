@@ -1,4 +1,8 @@
-import {getAlphagram, calculateWordValue} from '@utils/scrabbleWordUtils';
+import {
+  getAlphagram,
+  calculateWordValue,
+  findHooks,
+} from '@utils/scrabbleWordUtils';
 
 describe('getAlphagram', () => {
   it('should return an empty string for an empty word', () => {
@@ -103,5 +107,86 @@ describe('calculateWordValue', () => {
     const mockLetterValues = new Map(Object.entries({A: 1, B: 3, C: 3}));
     const result = calculateWordValue('XYZ', mockLetterValues);
     expect(result).toEqual(0);
+  });
+});
+
+describe('findHooks', () => {
+  it('should return an array with two empty sets for an empty word', () => {
+    // Arrange
+    const word = '';
+    const mockValidWords = new Set(['AT', 'CAT', 'ATE']);
+    const mockValidLetters = new Set(['A', 'C', 'E', 'T']);
+
+    // Act
+    const result = findHooks(word, mockValidWords, mockValidLetters);
+
+    // Assert
+    expect(result).toEqual([new Set([]), new Set([])]);
+  });
+
+  it('should return an array with two empty sets for an empty valid words set', () => {
+    // Arrange
+    const word = 'AT';
+    const mockValidWords = new Set([]);
+    const mockValidLetters = new Set(['A', 'C', 'E', 'T']);
+
+    // Act
+    const result = findHooks(word, mockValidWords, mockValidLetters);
+
+    // Assert
+    expect(result).toEqual([new Set([]), new Set([])]);
+  });
+
+  it('should return an array of two empty sets for an empty valid letters set', () => {
+    // Arrange
+    const word = 'AT';
+    const mockValidWords = new Set(['AT', 'CAT', 'ATE']);
+    const mockValidLetters = new Set([]);
+
+    // Act
+    const result = findHooks(word, mockValidWords, mockValidLetters);
+
+    // Assert
+    expect(result).toEqual([new Set([]), new Set([])]);
+  });
+
+  it('should find hooks for a word with one valid hook per side', () => {
+    // Arrange
+    const word = 'AT';
+    const mockValidWords = new Set(['AT', 'CAT', 'ATE']);
+    const mockValidLetters = new Set(['A', 'C', 'E', 'T']);
+
+    // Act
+    const result = findHooks(word, mockValidWords, mockValidLetters);
+
+    // Assert
+    expect(result).toEqual([new Set(['C']), new Set(['E'])]);
+  });
+
+  it('should return an array of two empty sets when the word has no hooks', () => {
+    // Arrange
+    const word = 'B';
+    const mockValidWords = new Set(['A', 'B', 'C']);
+    const mockValidLetters = new Set(['A', 'B', 'C']);
+
+    // Act
+    const result = findHooks(word, mockValidWords, mockValidLetters);
+
+    // Assert
+    expect(result).toEqual([new Set([]), new Set([])]);
+  });
+
+  it('should find hooks for a word with multiple valid hooks on both sides', () => {
+    // Arrange
+    const word = 'AT';
+    const mockValidWords = new Set(['CAT', 'BAT', 'FAT', 'ATE', 'ATS']);
+    const mockValidLetters = new Set(['C', 'B', 'F', 'A', 'T', 'E', 'S']);
+    const expectedHooks = [new Set(['C', 'B', 'F']), new Set(['E', 'S'])];
+
+    // Act
+    const result = findHooks(word, mockValidWords, mockValidLetters);
+
+    // Assert
+    expect(result).toEqual(expectedHooks);
   });
 });
