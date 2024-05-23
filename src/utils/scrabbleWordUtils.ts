@@ -7,18 +7,17 @@
  * word from left to right, giving precedence to trigraphs over digraphs and
  * single-character letters, and to digraphs over single-character letters.
  *
- * NOTE: If a letter is invalid, meaning it is not part of the provided array of
+ * NOTE: If a letter is invalid, meaning it is not part of the provided set of
  * valid letters, it is ignored and no error is thrown.
  *
  * @param word
  * The word from which to create an alphagram.
  * @param validLetters
- * An array of valid single-character letters, digraphs, and trigraphs.
+ * A set of valid single-character letters, digraphs, and trigraphs.
  * @returns
  * The alphagram of the given word.
  */
-export function getAlphagram(word: string, validLetters: string[]): string {
-  const validLettersSet = new Set(validLetters);
+export function getAlphagram(word: string, validLetters: Set<string>): string {
   const letters: string[] = [];
 
   let i = 0;
@@ -26,7 +25,7 @@ export function getAlphagram(word: string, validLetters: string[]): string {
     // Handle trigraph letters
     if (i + 2 < word.length) {
       const trigraph = word.slice(i, i + 3);
-      if (validLettersSet.has(trigraph)) {
+      if (validLetters.has(trigraph)) {
         letters.push(trigraph);
         i += 3;
         continue;
@@ -36,7 +35,7 @@ export function getAlphagram(word: string, validLetters: string[]): string {
     // Handle digraph letters
     if (i + 1 < word.length) {
       const digraph = word.slice(i, i + 2);
-      if (validLettersSet.has(digraph)) {
+      if (validLetters.has(digraph)) {
         letters.push(digraph);
         i += 2;
         continue;
@@ -45,7 +44,7 @@ export function getAlphagram(word: string, validLetters: string[]): string {
 
     // Handle single-character letters
     const letter = word[i];
-    if (validLettersSet.has(letter)) {
+    if (validLetters.has(letter)) {
       letters.push(letter);
     }
 
