@@ -7,3 +7,12 @@ export interface ScrabbleTileSet {
     };
   };
 }
+
+export interface WordList {
+  name: string;
+  language: string;
+  entries: {
+    word: string;
+    definition: string;
+  }[];
+}
