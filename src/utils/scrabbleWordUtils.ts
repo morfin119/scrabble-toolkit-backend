@@ -75,7 +75,7 @@ export function getAlphagram(word: string, validLetters: Set<string>): string {
 export function calculateWordValue(
   word: string,
   letterValues: Map<string, number>
-) {
+): number {
   let value = 0;
 
   let i = 0;
