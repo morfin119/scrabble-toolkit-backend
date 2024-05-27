@@ -1,5 +1,10 @@
 import {isISO6391} from 'validator';
-import {WordList} from '@src/types';
+import {EnhancedWordList, ScrabbleTileSet, WordList} from '@src/types';
+import {
+  calculateWordValue,
+  findHooks,
+  getAlphagram,
+} from '@utils/scrabbleWordUtils';
 
 /**
  * Parses a text-based word list into a structure WordList object.
@@ -53,4 +58,54 @@ export function parseTxtWordList(text: string): WordList {
     language: wordListLanguage,
     entries: processedEntries,
   } as WordList;
+}
+
+/**
+ * Enhances a given word list with additional information.
+ *
+ * This function takes a WordList object and a ScrabbleTileSet object, then
+ * enhances each word entry in the list with its alphagram, front/back hooks and
+ * value.
+ *
+ * @param wordList
+ * The original word list to enhance.
+ * @param tileSet
+ * The tile set used to compute alphagrams, hooks, and values.
+ * @returns
+ * The enhanced word list with additional information.
+ */
+export function enhanceWordList(
+  wordList: WordList,
+  tileSet: ScrabbleTileSet
+): EnhancedWordList {
+  const entries = wordList.entries;
+  const validWords = new Set(entries.map(entry => entry.word));
+  const validLetters = new Set(Object.keys(tileSet.tiles));
+  const letterValues = new Map(
+    Object.entries(tileSet.tiles).map(([key, value]) => [key, value.points])
+  );
+
+  const enhancedEntries = entries.map(entry => {
+    const alphagram = getAlphagram(entry.word, validLetters);
+    const [frontHooks, backHooks] = findHooks(
+      entry.word,
+      validWords,
+      validLetters
+    );
+    const value = calculateWordValue(entry.word, letterValues);
+    return {
+      word: entry.word,
+      definition: entry.definition,
+      alphagram: alphagram,
+      front_hooks: frontHooks,
+      back_hooks: backHooks,
+      value: value,
+    };
+  });
+
+  return {
+    name: wordList.name,
+    language: wordList.language,
+    entries: enhancedEntries,
+  } as EnhancedWordList;
 }

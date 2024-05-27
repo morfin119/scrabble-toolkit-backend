@@ -1,5 +1,6 @@
-import {WordList} from '@src/types';
-import {parseTxtWordList} from '@utils/wordListUtils';
+import {WordList, ScrabbleTileSet} from '@src/types';
+import {parseTxtWordList, enhanceWordList} from '@utils/wordListUtils';
+import * as scrabbleWordUtils from '@src/utils/scrabbleWordUtils';
 
 describe('parseTxtWordList', () => {
   it('should throw an error when the name of the word list is missing', () => {
@@ -132,5 +133,58 @@ describe('parseTxtWordList', () => {
         {word: 'AAH', definition: 'Second definition'},
       ],
     } as WordList);
+  });
+});
+
+describe('enhanceWordList', () => {
+  const getAlphagramSpy = jest.spyOn(scrabbleWordUtils, 'getAlphagram');
+  getAlphagramSpy.mockReturnValue('DORW');
+
+  const findHooksSpy = jest.spyOn(scrabbleWordUtils, 'findHooks');
+  findHooksSpy.mockReturnValue([new Set('S'), new Set(['S', 'Y'])]);
+
+  const calculateWordValueSpy = jest.spyOn(
+    scrabbleWordUtils,
+    'calculateWordValue'
+  );
+  calculateWordValueSpy.mockReturnValue(8);
+
+  it('should enhance each word entry with alphagram, hooks, and value', () => {
+    // Arrange
+    const wordList = {
+      name: 'TEST',
+      language: 'en',
+      entries: [{word: 'WORD', definition: 'a sample word'}],
+    } as WordList;
+
+    const tileSet = {
+      language: 'en',
+      tiles: {
+        D: {points: 2, count: 4},
+        O: {points: 1, count: 8},
+        R: {points: 1, count: 6},
+        W: {points: 4, count: 2},
+      },
+    } as ScrabbleTileSet;
+
+    // Act
+    const enhancedWordList = enhanceWordList(wordList, tileSet);
+
+    // Assert
+    expect(enhancedWordList.name).toEqual(wordList.name);
+    expect(enhancedWordList.language).toEqual(wordList.language);
+    expect(enhancedWordList.entries.length).toEqual(1);
+
+    const enhancedEntry = enhancedWordList.entries[0];
+    expect(enhancedEntry.word).toEqual('WORD');
+    expect(enhancedEntry.definition).toEqual('a sample word');
+    expect(enhancedEntry.alphagram).toEqual('DORW');
+    expect(enhancedEntry.front_hooks).toEqual(new Set('S'));
+    expect(enhancedEntry.back_hooks).toEqual(new Set(['S', 'Y']));
+    expect(enhancedEntry.value).toEqual(8);
+
+    expect(getAlphagramSpy).toHaveBeenCalled();
+    expect(findHooksSpy).toHaveBeenCalled();
+    expect(calculateWordValueSpy).toHaveBeenCalled();
   });
 });
