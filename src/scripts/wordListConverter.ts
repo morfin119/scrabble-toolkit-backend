@@ -18,7 +18,7 @@ function main() {
     const tileSet = JSON.parse(fs.readFileSync(tilesetPath, 'utf-8'));
     const enhancedWordList = enhanceWordList(wordList, tileSet);
 
-    fs.writeFileSync(outputFilePath, JSON.stringify(enhancedWordList, null, 2));
+    fs.writeFileSync(outputFilePath, JSON.stringify(enhancedWordList, null, 0));
     console.log(`Conversion complete. JSON saved to ${outputFilePath}`);
   } catch (error) {
     console.error('Error occurred during conversion:', error);
