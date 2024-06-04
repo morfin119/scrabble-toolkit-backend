@@ -1,7 +1,7 @@
 import {Router, Request, Response} from 'express';
-import {injectable} from 'tsyringe';
+import {autoInjectable} from 'tsyringe';
 import {check, validationResult} from 'express-validator';
-import TileSetService from '@components/TileSet/TileSetService';
+import TileSetService from '@src/components/TileSet/TileSet.service';
 
 // Middleware for language validation
 const validateLanguage = [
@@ -12,7 +12,7 @@ const validateLanguage = [
     .withMessage('Language parameter must be a valid ISO 639-1 code.'),
 ];
 
-@injectable()
+@autoInjectable()
 export default class TileSetController {
   private tileSetService: TileSetService;
   private router: Router;
@@ -23,15 +23,15 @@ export default class TileSetController {
   }
 
   routes(): Router {
-    this.router.get('/', (req: Request, res: Response) => {
-      const tileSets = this.tileSetService.getAllTileSets();
+    this.router.get('/', async (req: Request, res: Response) => {
+      const tileSets = await this.tileSetService.findAll();
       return res.status(200).json(tileSets);
     });
 
     this.router.get(
       '/:language',
       validateLanguage,
-      (req: Request, res: Response) => {
+      async (req: Request, res: Response) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
           return res.status(400).json({
@@ -40,7 +40,9 @@ export default class TileSetController {
         }
 
         const {language} = req.params;
-        const tileSet = this.tileSetService.getTileSet(language.toLowerCase());
+        const tileSet = await this.tileSetService.findByLanguage(
+          language.toLowerCase()
+        );
 
         if (tileSet) {
           return res.status(200).json(tileSet);

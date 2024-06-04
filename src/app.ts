@@ -2,43 +2,28 @@
 import express, {Express} from 'express';
 import morgan from 'morgan';
 import 'reflect-metadata'; // tsyringe
+import mongoose from 'mongoose';
 import {container} from 'tsyringe';
 import errorHandler from '@src/middleware/errorHandler';
 
 // Configuration imports
 import configureSwagger from '@config/swagger.config';
 
-// Custom types imports
-import {ScrabbleTileSet} from '@src/types';
-
-// Data imports
-import availableTileSets from '@utils/availableTileSets';
-
 // Controllers imports
-import TileSetController from '@components/TileSet/TileSetController';
+import TileSetController from '@src/components/TileSet/TileSet.controller';
 
-/**
- * Starts the sever by listening on the specified port or a default port if not
- * provided.
- *
- * @param app
- * The express app instance to start the server with.
- * @returns
- */
-function startServer(app: Express): void {
-  const port = process.env.PORT || 3000;
-  app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-  });
-}
-
-// Register providers
-container.register<ScrabbleTileSet[]>('AVAILABLE_TILESETS', {
-  useValue: availableTileSets,
-});
+// Register models
+import TileSetModel from '@components/TileSet/models/TileSet.model';
+container.register('TILESET_MODEL', {useValue: TileSetModel});
 
 // Create an instance of an express app
 const app: Express = express();
+
+// Open connection with database
+const mongoURI =
+  process.env.MONGODB_URI || 'mongodb://localhost:27017/scrabble_toolkit';
+mongoose.connect(mongoURI);
+console.log(`Successfully connected to ${mongoURI}`);
 
 // Configure Swagger documentation
 configureSwagger(
@@ -56,4 +41,7 @@ app.use('/api/tileSets', container.resolve(TileSetController).routes());
 app.use(errorHandler);
 
 // Start the server
-startServer(app);
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
