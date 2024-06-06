@@ -12,7 +12,13 @@ const tileSetSchema: Schema = new Schema<ITileSet>({
   },
   tiles: [
     {
-      letter: {type: String, required: true, immutable: true, uppercase: true},
+      letter: {
+        type: String,
+        required: true,
+        immutable: true,
+        uppercase: true,
+        trim: true,
+      },
       points: {type: Number, required: true, immutable: true, min: 0},
       count: {type: Number, required: true, immutable: true, min: 0},
     },

@@ -1,5 +1,6 @@
 import {isISO6391} from 'validator';
-import {EnhancedWordList, ScrabbleTileSet, WordList} from '@src/types';
+import {EnhancedWordList, WordList} from '@src/types';
+import {ITileSet} from '@components/TileSet/interfaces/TileSet.interface';
 import {
   calculateWordValue,
   findHooks,
@@ -76,7 +77,7 @@ export function parseTxtWordList(text: string): WordList {
  */
 export function enhanceWordList(
   wordList: WordList,
-  tileSet: ScrabbleTileSet
+  tileSet: ITileSet
 ): EnhancedWordList {
   const entries = wordList.entries;
   const validWords = new Set(entries.map(entry => entry.word));
