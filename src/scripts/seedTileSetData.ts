@@ -35,7 +35,7 @@ async function main(): Promise<void> {
   const dataPath = args[1];
 
   if (!mongoURI || !dataPath) {
-    console.error('Usage: node script.js <mongoURI> <dataPath>');
+    console.error('Usage: npx ts-node script.js <mongoURI> <dataPath>');
     process.exitCode = 1;
     return;
   }
