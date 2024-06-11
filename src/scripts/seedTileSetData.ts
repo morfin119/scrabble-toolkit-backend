@@ -14,8 +14,10 @@ import {ITileSet} from '@components/TileSet/interfaces/TileSet.interface';
 
 /**
  * Inserts tile set data into the MongoDB if it's not already present.
- * @param data The parsed tile set data.
- * @returns A promise that resolves when the processing is complete.
+ * @param data
+ * The tile set data to be inserted.
+ * @returns
+ * A promise that resolves when the processing is complete.
  */
 async function seedTileSet(data: ITileSet): Promise<void> {
   const tileSetExists = await TileSetModel.exists({language: data.language});
@@ -35,7 +37,9 @@ async function main(): Promise<void> {
   const dataPath = args[1];
 
   if (!mongoURI || !dataPath) {
-    console.error('Usage: npx ts-node script.js <mongoURI> <dataPath>');
+    console.error(
+      'Usage: npx ts-node seedTileSetData.ts <mongoURI> <dataPath>'
+    );
     process.exitCode = 1;
     return;
   }
