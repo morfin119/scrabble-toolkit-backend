@@ -1,8 +1,8 @@
 /* eslint-disable node/no-unpublished-import */
 import mongoose from 'mongoose';
 import {MongoMemoryServer} from 'mongodb-memory-server';
-import TileSetModel from '@components/TileSet/models/TileSet.model';
 import {ITileSet} from '@components/TileSet/interfaces/TileSet.interface';
+import tileSetSchema from '@components/TileSet/schemas/TileSet.schema';
 import TileSetService from '@components/TileSet/TileSet.service';
 
 // Mock data
@@ -37,6 +37,7 @@ describe('Tile Set service', () => {
   describe('findAll()', () => {
     it('should find all available tile sets', async () => {
       // Arrange
+      const TileSetModel = mongoose.model<ITileSet>('TileSet', tileSetSchema);
       const tileSetService = new TileSetService(TileSetModel);
       await TileSetModel.create(mockTileSets);
 
@@ -50,6 +51,7 @@ describe('Tile Set service', () => {
     });
     it('should return an empty array when there are no tile sets', async () => {
       // Arrange
+      const TileSetModel = mongoose.model<ITileSet>('TileSet', tileSetSchema);
       const tileSetService = new TileSetService(TileSetModel);
 
       // Act
@@ -64,6 +66,7 @@ describe('Tile Set service', () => {
   describe('findByLanguage()', () => {
     it('should return the tile set for the specified language', async () => {
       // Arrange
+      const TileSetModel = mongoose.model<ITileSet>('TileSet', tileSetSchema);
       const tileSetService = new TileSetService(TileSetModel);
       await TileSetModel.create(mockTileSets);
 
@@ -76,6 +79,7 @@ describe('Tile Set service', () => {
 
     it('should return null if the tile set for the specified language is not found', async () => {
       // Arrange
+      const TileSetModel = mongoose.model<ITileSet>('TileSet', tileSetSchema);
       const tileSetService = new TileSetService(TileSetModel);
       await TileSetModel.create(mockTileSets);
 

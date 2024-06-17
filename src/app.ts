@@ -9,21 +9,27 @@ import errorHandler from '@src/middleware/errorHandler';
 // Configuration imports
 import configureSwagger from '@config/swagger.config';
 
+// Interfaces imports
+import {ITileSet} from '@components/TileSet/interfaces/TileSet.interface';
+
+// Schemas imports
+import tileSetSchema from '@components/TileSet/schemas/TileSet.schema';
+
 // Controllers imports
 import TileSetController from '@src/components/TileSet/TileSet.controller';
-
-// Register models
-import TileSetModel from '@components/TileSet/models/TileSet.model';
-container.register('TILESET_MODEL', {useValue: TileSetModel});
-
-// Create an instance of an express app
-const app: Express = express();
 
 // Open connection with database
 const mongoURI =
   process.env.MONGODB_URI || 'mongodb://localhost:27017/scrabble_toolkit';
 mongoose.connect(mongoURI);
 console.log(`Successfully connected to ${mongoURI}`);
+
+// Register models
+const TileSetModel = mongoose.model<ITileSet>('TileSet', tileSetSchema);
+container.register('TILESET_MODEL', {useValue: TileSetModel});
+
+// Create an instance of an express app
+const app: Express = express();
 
 // Configure Swagger documentation
 configureSwagger(

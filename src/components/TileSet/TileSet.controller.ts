@@ -1,7 +1,7 @@
 import {Router, Request, Response} from 'express';
 import {autoInjectable} from 'tsyringe';
 import {check, validationResult} from 'express-validator';
-import TileSetService from '@src/components/TileSet/TileSet.service';
+import TileSetService from '@components/TileSet/TileSet.service';
 
 // Middleware for language validation
 const validateLanguage = [

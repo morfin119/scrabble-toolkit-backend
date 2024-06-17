@@ -1,4 +1,4 @@
-import mongoose, {Schema} from 'mongoose';
+import {Schema} from 'mongoose';
 import {isISO6391} from 'validator';
 import {ITileSet} from '@components/TileSet/interfaces/TileSet.interface';
 
@@ -25,6 +25,4 @@ const tileSetSchema: Schema = new Schema<ITileSet>({
   ],
 });
 
-const TileSetModel = mongoose.model<ITileSet>('TileSet', tileSetSchema);
-
-export default TileSetModel;
+export default tileSetSchema;
