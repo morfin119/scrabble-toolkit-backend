@@ -10,12 +10,11 @@
     "outDir": "build",
     "baseUrl": "./",
     "paths": {
-      "@src/*": ["src/*"],
       "@components/*": ["src/components/*"],
-      "@data/*": ["data/*"],
       "@config/*": ["src/config/*"],
       "@utils/*": ["src/utils/*"],
       "@middleware/*": ["src/middleware/*"],
+      "@src/*": ["src/*"],
     },
   },
   "include": ["src/**/*.ts"],
