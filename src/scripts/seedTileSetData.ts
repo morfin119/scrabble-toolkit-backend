@@ -8,45 +8,60 @@
  */
 import fs from 'fs';
 import path from 'path';
-import mongoose from 'mongoose';
-import TileSetModel from '@components/TileSet/models/TileSet.model';
+import mongoose, {Model} from 'mongoose';
+import tileSetSchema from '@components/TileSet/schemas/TileSet.schema';
 import {ITileSet} from '@components/TileSet/interfaces/TileSet.interface';
 
 /**
  * Inserts tile set data into the MongoDB if it's not already present.
  * @param data
  * The tile set data to be inserted.
+ * @param TileSetModel
+ * The Mongoose model for the tile set.
  * @returns
  * A promise that resolves when the processing is complete.
  */
-async function seedTileSet(data: ITileSet): Promise<void> {
-  const tileSetExists = await TileSetModel.exists({language: data.language});
+async function seedTileSet(
+  data: ITileSet,
+  TileSetModel: Model<ITileSet>
+): Promise<void> {
+  try {
+    const tileSetExists = await TileSetModel.exists({language: data.language});
 
-  if (tileSetExists) {
-    console.log(`Tile set for language '${data.language}' already exists.`);
-  } else {
-    const newTileSet = new TileSetModel(data);
-    await newTileSet.save();
-    console.log(`Tile set for language '${data.language}' added successfully`);
+    if (tileSetExists) {
+      console.warn(`Tile set for language '${data.language}' already exists.`);
+    } else {
+      const newTileSet = new TileSetModel(data);
+      await newTileSet.save();
+      console.log(
+        `Tile set for language '${data.language}' added successfully`
+      );
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(
+        `Failed to seed tile set for language '${data.language}': ${error.message}`
+      );
+    }
   }
 }
 
 async function main(): Promise<void> {
-  const args = process.argv.slice(2);
-  const mongoURI = args[0];
-  const dataPath = args[1];
+  const [dataPath, mongoURI] = process.argv.slice(2);
 
-  if (!mongoURI || !dataPath) {
+  if (!dataPath || !mongoURI) {
     console.error(
-      'Usage: npx ts-node seedTileSetData.ts <mongoURI> <dataPath>'
+      'Usage: npx ts-node seedTileSetData.ts <dataPath> <mongoURI>'
     );
     process.exitCode = 1;
     return;
   }
 
+  let conn: mongoose.Connection | null = null;
+
   try {
-    await mongoose.connect(mongoURI);
-    console.log(`Successfully connected to ${mongoURI}`);
+    conn = await mongoose.createConnection(mongoURI).asPromise();
+    console.log('Successfully connected to MongoDB');
 
     const files = fs.readdirSync(dataPath);
     for (const file of files) {
@@ -54,7 +69,10 @@ async function main(): Promise<void> {
       if (path.extname(filePath) === '.json') {
         const fileContent = fs.readFileSync(filePath, 'utf-8');
         const tilesetData = JSON.parse(fileContent) as ITileSet;
-        await seedTileSet(tilesetData);
+        await seedTileSet(
+          tilesetData,
+          conn.model<ITileSet>('TileSet', tileSetSchema)
+        );
       }
     }
     console.log(`Tile sets successfully loaded from ${dataPath}`);
@@ -63,7 +81,7 @@ async function main(): Promise<void> {
       throw new Error('Unexpected error: ' + error);
     }
   } finally {
-    await mongoose.connection.close();
+    await conn?.close();
   }
 }
 
