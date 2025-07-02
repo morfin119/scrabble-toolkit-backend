@@ -21,8 +21,19 @@ import TileSetController from '@src/components/TileSet/TileSet.controller';
 // Open connection with database
 const mongoURI =
   process.env.MONGODB_URI || 'mongodb://localhost:27017/scrabble_toolkit';
-mongoose.connect(mongoURI);
-console.log(`Successfully connected to ${mongoURI}`);
+
+(async () => {
+  try {
+    await mongoose.connect(mongoURI);
+    console.log('Successfully connected to MongoDB');
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('MongoDB connection failed: ' + error.message);
+    } else {
+      console.error('MongoDB connection failed with unknown error:', error);
+    }
+  }
+})();
 
 // Register models
 const TileSetModel = mongoose.model<ITileSet>('TileSet', tileSetSchema);
