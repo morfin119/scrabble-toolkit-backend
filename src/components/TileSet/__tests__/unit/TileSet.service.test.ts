@@ -26,11 +26,11 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
-  await mongoose.connection.db.dropDatabase();
+  await mongoose.connection.db?.dropDatabase();
 });
 
 afterEach(async () => {
-  await mongoose.connection.db.dropDatabase();
+  await mongoose.connection.db?.dropDatabase();
 });
 
 describe('Tile Set service', () => {
