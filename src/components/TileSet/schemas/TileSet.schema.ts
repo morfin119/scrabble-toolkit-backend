@@ -3,6 +3,12 @@ import {isISO6391} from 'validator';
 import {ITileSet} from '@components/TileSet/interfaces/TileSet.interface';
 
 const tileSetSchema: Schema = new Schema<ITileSet>({
+  name: {
+    type: String,
+    required: true,
+    immutable: true,
+    unique: true,
+  },
   language: {
     type: String,
     required: true,

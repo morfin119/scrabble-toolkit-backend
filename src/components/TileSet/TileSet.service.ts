@@ -21,15 +21,26 @@ export default class TileSetService {
   }
 
   /**
-   * Retrieves a Scrabble tile set based on the specified language.
+   * Retrieves a Scrabble tile set by its unique name.
+   *
+   * @param name
+   * The name of the tile set to retrieve.
+   * @returns
+   * The TileSet matching the specified name, or null if not found.
+   */
+  async findByName(name: string) {
+    return this.tileSetModel.findOne({name}).lean().exec();
+  }
+
+  /**
+   * Retrieves all Scrabble tile sets for the specified language.
    *
    * @param language
-   * The language of the tile set to retrieve.
+   * The language of the tile sets to retrieve.
    * @returns
-   * The ScrabbleTileSet corresponding to the specified language, or undefined
-   * if not found.
+   * An array of TileSets for the specified language.
    */
   async findByLanguage(language: string) {
-    return this.tileSetModel.findOne({language: language}).lean().exec();
+    return this.tileSetModel.find({language: language}).lean().exec();
   }
 }

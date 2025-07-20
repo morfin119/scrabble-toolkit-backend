@@ -7,8 +7,21 @@ import TileSetService from '@components/TileSet/TileSet.service';
 
 // Mock data
 const mockTileSets: ITileSet[] = [
-  {language: 'en', tiles: [{letter: 'A', points: 1, count: 9}]},
-  {language: 'es', tiles: [{letter: 'A', points: 1, count: 12}]},
+  {
+    name: 'EN_Standard',
+    language: 'en',
+    tiles: [{letter: 'A', points: 1, count: 9}],
+  },
+  {
+    name: 'ES_Standard',
+    language: 'es',
+    tiles: [{letter: 'A', points: 1, count: 12}],
+  },
+  {
+    name: 'ES_US',
+    language: 'es',
+    tiles: [{letter: 'A', points: 1, count: 11}],
+  },
 ];
 
 let mongoServer: MongoMemoryServer;
@@ -43,7 +56,7 @@ describe('Tile Set service', () => {
 
       // Act
       let result = await tileSetService.findAll();
-      result = result.sort((a, b) => a.language.localeCompare(b.language));
+      result = result.sort((a, b) => a.name.localeCompare(b.name));
 
       // Assert
       expect(result?.length).toEqual(mockTileSets.length);
@@ -56,7 +69,7 @@ describe('Tile Set service', () => {
 
       // Act
       let result = await tileSetService.findAll();
-      result = result.sort((a, b) => a.language.localeCompare(b.language));
+      result = result.sort((a, b) => a.name.localeCompare(b.name));
 
       // Assert
       expect(result).toEqual([]);
@@ -64,20 +77,21 @@ describe('Tile Set service', () => {
   });
 
   describe('findByLanguage()', () => {
-    it('should return the tile set for the specified language', async () => {
+    it('should return all tile sets for the specified language', async () => {
       // Arrange
       const TileSetModel = mongoose.model<ITileSet>('TileSet', tileSetSchema);
       const tileSetService = new TileSetService(TileSetModel);
       await TileSetModel.create(mockTileSets);
 
       // Act
-      const result = await tileSetService.findByLanguage('en');
+      let result = await tileSetService.findByLanguage('es');
+      result = result.sort((a, b) => a.name.localeCompare(b.name));
 
       // Assert
-      expect(result).toMatchObject(mockTileSets[0]);
+      expect(result).toMatchObject([mockTileSets[1], mockTileSets[2]]);
     });
 
-    it('should return null if the tile set for the specified language is not found', async () => {
+    it('should return an empty array if no tile sets for the specified language are found', async () => {
       // Arrange
       const TileSetModel = mongoose.model<ITileSet>('TileSet', tileSetSchema);
       const tileSetService = new TileSetService(TileSetModel);
@@ -87,7 +101,7 @@ describe('Tile Set service', () => {
       const result = await tileSetService.findByLanguage('pt');
 
       // Assert
-      expect(result).toBeNull();
+      expect(result).toMatchObject([]);
     });
   });
 });

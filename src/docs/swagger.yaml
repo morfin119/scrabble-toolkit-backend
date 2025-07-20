@@ -37,7 +37,6 @@ paths:
   /api/tilesets:
     get:
       summary: Retrieve all available Scrabble tile sets.
-      description: Retrieve the available Scrabble tile sets.
       tags:
         - Tile Sets
       responses:
@@ -49,24 +48,56 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/TileSet'
-                  
-  /api/tilesets/{language}:
+
+  /api/tilesets/name/{name}:
     get:
-      summary: Retrieves a Scrabble tile set based on the specified language.
-      description: Returns the Scrabble tile set for the specified language, if available.
+      summary: Retrieves a Scrabble tile set by its name.
+      tags:
+        - Tile Sets
+      parameters:
+        - name: name
+          in: path
+          description: The name of the Scrabble tile set to retrieve.
+          required: true
+          schema:
+            type: string
+          example: en_standard
+      responses:
+        200:
+          description: Successful response. Returns a single Scrabble tile set object.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/TileSet'
+        404:
+          description: Tile set not found for the provided name.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A message indicating the error.
+              example:
+                message: Scrabble tile set not found for name '{name}'.
+
+  /api/tilesets/language/{language}:
+    get:
+      summary: Retrieves all Scrabble tile sets for the specified language.
       tags:
         - Tile Sets
       parameters:
         - name: language
           in: path
-          description: The language code for the desired tile set (ISO 639-1).
+          description: The language code for the desired tile sets to retrieve (ISO 639-1).
           required: true
           schema:
             type: string
           example: en
       responses:
         200:
-          description: Successful response. Returns a single Scrabble tile set object.
+          description: Successful response. Returns an array of Scrabble tile sets.
           content:
             application/json:
               schema:
@@ -83,15 +114,3 @@ paths:
                     description: A message indicating the error.
               example:
                 message: Language parameter must be a valid ISO 639-1 code.
-        404:
-          description: Tile set not found for the provided language.,
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    description: A message indicating the error.
-              example:
-                message: Scrabble tile set not found for language '{language}'.
