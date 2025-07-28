@@ -30,8 +30,37 @@ components:
               C:
                 points: 3
                 count: 2
+      EnrichedWord:
+        type: object
+        properties:
+          word:
+            type: string
+            example: apple
+          definition: 
+            type: string
+            example: an edible fruit [n APPLES]
+          alphagram:
+            type: string
+            example: AELPP
+          frontHooks:
+            type: string[]
+            example: ['D']
+          backHooks:
+            type: string[]
+            example: ['S', 'T', 'Y']
+          value:
+            type: number
+            example: 10
+          wordListName:
+            type: string
+            example: NWL2023
+          tilsetName:
+            type: string
+            example: EN_STANDARD
+
 tags:
   - name: Tile Sets
+  - name: Enriched Words
     
 paths:
   /api/tilesets:
@@ -61,7 +90,7 @@ paths:
           required: true
           schema:
             type: string
-          example: en_standard
+          example: EN_STANDARD
       responses:
         200:
           description: Successful response. Returns a single Scrabble tile set object.
@@ -114,3 +143,62 @@ paths:
                     description: A message indicating the error.
               example:
                 message: Language parameter must be a valid ISO 639-1 code.
+
+  /api/enrichedwords/{wordListName}/{tileSetName}/{pattern}:
+    get:
+      summary: Finds a word in a specific word list using the specified tile set.
+      tags:
+        - Enriched Words
+      parameters:
+        - name: wordListName
+          in: path
+          description: The name of the word list where to look for the word.
+          required: true
+          schema:
+            type: string
+          example: NWL2023
+        - name: tileSetName
+          in: path
+          description: The name of the tile set used to enrich the words.
+          required: true
+          schema:
+            type: string
+          example: EN_STANDARD
+        - name: pattern
+          in: path
+          description: The word/pattern to search.
+          required: true
+          schema:
+            type: string
+          example: APPLE
+      responses:
+        200:
+            description: Successful response. Returns an enriched word.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/EnrichedWord'
+        404:
+          description: Enriched word not found for the provided parameters.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A message indicating the error.
+              example:
+                message: "Word 'ZXRT' not found inside 'NWL2023' word list using 'EN_STANDARD' tile set."
+        400:
+          description: Invalid request. This error occurs when the language parameter is not a valid ISO 639-1 code.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A message indicating the error.
+              example:
+                message: "'validatePattern' query parameter is required"

@@ -11,12 +11,15 @@ import configureSwagger from '@config/swagger.config';
 
 // Interfaces imports
 import {ITileSet} from '@components/TileSet/interfaces/TileSet.interface';
+import {IEnrichedWord} from '@components/EnrichedWord/interfaces/EnrichedWord.interface';
 
 // Schemas imports
 import tileSetSchema from '@components/TileSet/schemas/TileSet.schema';
+import enrichedWordSchema from '@components/EnrichedWord/schemas/EnrichedWord.schema';
 
 // Controllers imports
 import TileSetController from '@src/components/TileSet/TileSet.controller';
+import EnrichedWordController from '@components/EnrichedWord/EnrichedWord.controller';
 
 // Open connection with database
 const mongoURI =
@@ -39,6 +42,12 @@ const mongoURI =
 const TileSetModel = mongoose.model<ITileSet>('TileSet', tileSetSchema);
 container.register('TILESET_MODEL', {useValue: TileSetModel});
 
+const EnrichedWordModel = mongoose.model<IEnrichedWord>(
+  'EnrichedWord',
+  enrichedWordSchema
+);
+container.register('ENRICHED_WORD_MODEL', {useValue: EnrichedWordModel});
+
 // Create an instance of an express app
 const app: Express = express();
 
@@ -53,6 +62,10 @@ app.use(morgan('tiny'));
 
 // Define routes
 app.use('/api/tileSets', container.resolve(TileSetController).routes());
+app.use(
+  '/api/enrichedWords',
+  container.resolve(EnrichedWordController).routes()
+);
 
 // Register the error handler middleware
 app.use(errorHandler);
