@@ -1,0 +1,29 @@
+# Scrabble toolkit (backend)
+
+## 📝 Description
+This project is the backend of a Scrabble toolkit, inspired by NASPA Zyzzyva. It is designed to help Scrabble enthusiasts search for words, analyze moves, and study optimal Scrabble strategies.
+
+### 🌍 Multilingual & Scalable
+The backend is designed for multilingual support and easy scaling. It allows for:
+* Custom word lists in different languages
+* Configurable tile distributions per language or variant
+  ([Wikipedia](https://en.wikipedia.org/wiki/Scrabble_letter_distributions))
+
+### 🧱 Tech Stack
+* Express – HTTP server for API routing
+* TypeScript – Type-safe
+* tsyringe – Dependency injection
+* OpenAPI – Interactive API documentation
+
+⚠️ Note: Official word lists (e.g., TWL, CSW) are not included in this repository due to copyright restrictions. Users must supply their own lexicons.
+- [x] __Word Search__ – Check word validity
+- [ ] __Find Anagrams__ – Rearranged letters that form valid words ([wiktionary](https://en.wiktionary.org/wiki/anagram))
+- [ ] __Find Subanagrams__ – Valid words using a subset of given letters
+- [ ] __Find Front Hooks__ - Letters that can be added to the beginning of a word to form another word ([www.scrabbleplayers.org](https://www.scrabbleplayers.org/w/Glossary#F))
+- [ ] __Find back Hooks__ - Letters that can be added to the end of a word to form another word ([www.scrabbleplayers.org](https://www.scrabbleplayers.org/w/Glossary#B))
+- [ ] __Find by Pattern__ - Use `?` or `.` as wildcards
+- [ ] __Find Extensions__ - Words that contain the given word as a substring
+- [ ] __Find Anagram Hooks__ - Anagrams formed by adding one letter
+- [ ] __Find Blank Anagrams__ - A word which is an anagram of another but for the substitution of a single letter ([wiktionary](https://en.wiktionary.org/wiki/blanagram))
+- [ ] __Find Blank Matches__ - Words formed by replacing letters with blanks
+- [ ] __Find Transpositions__ Words formed by swapping two adjacent letters
