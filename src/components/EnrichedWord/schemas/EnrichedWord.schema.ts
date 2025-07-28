@@ -1,7 +1,7 @@
-import mongoose, {Schema} from 'mongoose';
-import {IWordListEntry} from '@components/WordListEntry/interfaces/WordListEntry.interface';
+import {Schema} from 'mongoose';
+import {IEnrichedWord} from '@components/EnrichedWord/interfaces/EnrichedWord.interface';
 
-const wordListEntrySchema: Schema = new Schema<IWordListEntry>({
+const enrichedWordSchema: Schema = new Schema<IEnrichedWord>({
   word: {
     type: String,
     required: true,
@@ -37,7 +37,20 @@ const wordListEntrySchema: Schema = new Schema<IWordListEntry>({
     immutable: true,
     min: 0,
   },
-  wordListId: mongoose.Types.ObjectId,
+  wordListName: {
+    type: String,
+    required: true,
+    immutable: true,
+    uppercase: true,
+    trim: true,
+  },
+  tileSetName: {
+    type: String,
+    required: true,
+    immutable: true,
+    lowercase: false,
+    trim: true,
+  },
 });
 
-export default wordListEntrySchema;
+export default enrichedWordSchema;

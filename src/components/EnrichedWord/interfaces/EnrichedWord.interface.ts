@@ -1,11 +1,10 @@
-import mongoose from 'mongoose';
-
-export interface IWordListEntry {
+export interface IEnrichedWord {
   word: string;
   definition: string;
   alphagram: string;
   frontHooks: string[];
   backHooks: string[];
   value: number;
-  wordListId: mongoose.Types.ObjectId;
+  wordListName: string;
+  tileSetName: string;
 }
