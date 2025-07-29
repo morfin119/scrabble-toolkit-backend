@@ -35,3 +35,23 @@ You can query the backend for a variety of word-related data. Here’s what’s 
 - [ ] __Find Blank Anagrams__ - A word which is an anagram of another but for the substitution of a single letter ([Wiktionary](https://en.wiktionary.org/wiki/blanagram))
 - [ ] __Find Blank Matches__ - Words formed by replacing letters with blanks
 - [ ] __Find Transpositions__ Words formed by swapping two adjacent letters
+
+## 🛠️ Installation
+To get started with the project:
+1. Clone the repository
+```
+git clone https://github.com/yourusername/scrabble-backend.git
+cd scrabble-toolkit-backend
+```
+2. Install dependencies
+```
+npm install
+```
+3. Set environment variables
+Please set the following environment variables before running the server:
+* MONGODB_URI – your MongoDB connection string
+* PORT - the port number the server should listen on (optional, defaults to 3000)
+5. Run the server
+```
+npm start
+```
