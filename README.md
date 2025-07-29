@@ -25,7 +25,7 @@ Curious how the API works? You can explore and interact with it right now using 
 ## 🔍 Supported Search Features
 You can query the backend for a variety of word-related data. Here’s what’s currently supported:
 - [x] __Word Search__ – Check word validity
-- [ ] __Find Anagrams__ – Rearranged letters that form valid words ([Wiktionary](https://en.wiktionary.org/wiki/anagram))
+- [x] __Find Anagrams__ – Rearranged letters that form valid words ([Wiktionary](https://en.wiktionary.org/wiki/anagram))
 - [ ] __Find Subanagrams__ – Valid words using a subset of given letters
 - [ ] __Find Front Hooks__ - Letters that can be added to the beginning of a word to form another word ([www.scrabbleplayers.org](https://www.scrabbleplayers.org/w/Glossary#F))
 - [ ] __Find back Hooks__ - Letters that can be added to the end of a word to form another word ([www.scrabbleplayers.org](https://www.scrabbleplayers.org/w/Glossary#B))
