@@ -202,3 +202,68 @@ paths:
                     description: A message indicating the error.
               example:
                 message: "'validatePattern' query parameter is required"
+  /api/enrichedwords/anagrams/{wordListName}/{tileSetName}/{pattern}:
+    get:
+      summary: Finds anagrams of a word in a specified word list using the specified tile set.
+      tags:
+        - Enriched Words
+      parameters:
+        - name: wordListName
+          in: path
+          description: The name of the word list where to look for the anagrams.
+          required: true
+          schema:
+            type: string
+          example: NWL2023
+        - name: tileSetName
+          in: path
+          description: The name of the tile set used to enrich the words.
+          required: true
+          schema:
+            type: string
+          example: EN_STANDARD
+        - name: pattern
+          in: path
+          description: The letters to be used in the search.
+          required: true
+          schema:
+            type: string
+          example: TAC
+      responses:
+        200:
+          description: Successful response. Returns an array of enriched words.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EnrichedWord'
+                example:
+                  - word: "ACT"
+                    definition: "to do something [v ACTED, ACTING, ACTS]"
+                    alphagram: "ACT"
+                    frontHooks: "FPT"
+                    backHooks: "AS"
+                    value: 5
+                    wordListName: "NWL2023"
+                    tileSetName: "EN_STANDARD"
+                  - word: "CAT"
+                    definition: "to hoist an anchor to the cathead [v CATS, CATTED, CATTING]"
+                    alphagram: "ACT"
+                    frontHooks: "S"
+                    backHooks: "EHS"
+                    value: 5
+                    wordListName: "NWL2023"
+                    tileSetName: "EN_STANDARD"
+        400:
+          description: Invalid request. This error occurs when the language parameter is not a valid ISO 639-1 code.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A message indicating the error.
+              example:
+                message: "'validatePattern' query parameter is required"

@@ -108,6 +108,34 @@ export default class EnrichedWordController {
       }
     );
 
+    this.router.get(
+      '/anagrams/:wordListName/:tileSetName/:pattern',
+      validateWordListName,
+      validateTileSetName,
+      validatePattern,
+      async (req: Request, res: Response, next: NextFunction) => {
+        try {
+          const errors = validationResult(req);
+          if (!errors.isEmpty()) {
+            return res.status(400).json({
+              message: errors.array()[0].msg,
+            });
+          }
+
+          const {wordListName, tileSetName, pattern} = req.params;
+
+          const result = await this.enrichedWordService.findAnagrams(
+            pattern as string,
+            wordListName as string,
+            tileSetName as string
+          );
+
+          return res.status(200).json(result);
+        } catch (error: unknown) {
+          return next(error);
+        }
+      }
+    );
     return this.router;
   }
 }
