@@ -113,8 +113,7 @@ async function main(): Promise<void> {
 
   try {
     const BATCH_SIZE = 100;
-    const WordListName = path.parse(wordListPath).name;
-    const tileSetName = path.parse(tileSetPath).name;
+    const wordListName = path.parse(wordListPath).name;
 
     const wordListContent = fs.readFileSync(wordListPath, 'utf-8');
     const wordListEntries = parseWordListEntries(wordListContent);
@@ -139,8 +138,8 @@ async function main(): Promise<void> {
         validWords,
         validLetters,
         letterValues,
-        WordListName,
-        tileSetName
+        wordListName,
+        tilesetData.name
       );
       buffer.push(enrichedEntry);
       if (buffer.length >= BATCH_SIZE) {
