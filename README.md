@@ -11,17 +11,18 @@ The backend is designed for multilingual support and easy scaling. It allows for
 
 ⚠️ Note: Official word lists (e.g., TWL, CSW) are not included in this repository due to copyright restrictions. Users must supply their own lexicons.
 
----
+## 🚀 Try It Out
+Curious how the API works? You can explore and interact with it right now using the built-in OpenAPI UI:
 
-### 🧱 Tech Stack
+👉 [Try the API on Render](https://scrabble-toolkit-backend.onrender.com/api-docs/)
+
+## 🧱 Tech Stack
 * Express – HTTP server for API routing
 * TypeScript – Type-safe
 * tsyringe – Dependency injection
 * OpenAPI – Interactive API documentation
 
----
-
-### 🔍 Supported Search Features
+## 🔍 Supported Search Features
 You can query the backend for a variety of word-related data. Here’s what’s currently supported:
 - [x] __Word Search__ – Check word validity
 - [ ] __Find Anagrams__ – Rearranged letters that form valid words ([Wiktionary](https://en.wiktionary.org/wiki/anagram))
